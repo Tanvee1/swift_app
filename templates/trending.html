@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Trending Products</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <h1 style="text-align:center;">🔥 Trending Products</h1>
+  <div class="grid">
+    {% for product in products %}
+    <div class="card">
+      <img src="/static/assets/{{ product.image }}" alt="{{ product.name }}">
+      <div class="card-body">
+        <h3>{{ product.name }}</h3>
+        <p>₹{{ product.price }}</p>
+        <p>{{ product.category }}</p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</body>
+</html>

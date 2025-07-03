@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SwiftShop – Mood Shopping</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1> Welcome to SwiftShop</h1>
+    <p>Your intelligent shopping experience, reimagined.</p>
+
+    <!-- Mood Section 1 -->
+    <div class="mood-section">
+      <h2> Daily utility</h2>
+      <div class="reel">
+        <div class="card">
+          <img src="/static/assets/tide-detergent.png" />
+          <p>Tide Detergent – ₹150</p>
+          <button onclick="shelve('Tide Detergent')">➕ Shelve</button>
+        </div>
+        <div class="card">
+          <img src="/static/assets/amul-butter.png" />
+          <p>Amul Butter – ₹55</p>
+          <button onclick="shelve('Amul Butter')">➕ Shelve</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mood Section 2 -->
+    <div class="mood-section">
+      <h2> Craving Something Sweet?</h2>
+      <div class="reel">
+        <div class="card">
+          <img src="/static/assets/parle-g.png" />
+          <p>Parle-G – ₹10</p>
+          <button onclick="shelve('Parle-G')">➕ Shelve</button>
+        </div>
+        <div class="card">
+          <img src="/static/assets/bournvita.png" />
+          <p>Bournvita – ₹249</p>
+          <button onclick="shelve('Bournvita')">➕ Shelve</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="shelf-preview">
+      <h3>🧺 Shelfed Items</h3>
+      <ul id="shelfList"></ul>
+    </div>
+
+    <div class="actions">
+      <a href="/chat" class="button">💬 Ask Assistant</a>
+      <a href="/trending" class="button">📈 See Trends</a>
+      <a href="/map" class="button">🗺️ Store Map</a>
+    </div>
+  </div>
+
+  <script>
+  const shelf = [];
+
+  function shelve(item) {
+    const idx = shelf.indexOf(item);
+    const list = document.getElementById("shelfList");
+
+    if (idx === -1) {
+      shelf.push(item);
+      const li = document.createElement("li");
+      li.textContent = item;
+      li.id = item.replace(/\s+/g, "_");
+      li.onclick = () => unshelve(item);
+      list.appendChild(li);
+    }
+  }
+
+  function unshelve(item) {
+    const idx = shelf.indexOf(item);
+    if (idx !== -1) {
+      shelf.splice(idx, 1);
+      const li = document.getElementById(item.replace(/\s+/g, "_"));
+      if (li) li.remove();
+    }
+  }
+</script>
+
+</body>
+</html>

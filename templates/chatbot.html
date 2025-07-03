@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Retail Assistant</title>
+  <style>
+    body { font-family: Arial; background: #f5f5f5; margin: 0; padding: 0; }
+    .container { max-width: 600px; margin: auto; padding: 20px; background: white; margin-top: 50px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .message { margin: 10px 0; }
+    .user { text-align: right; color: blue; }
+    .bot { text-align: left; color: green; }
+    input[type="text"] { width: 80%; padding: 10px; border: 1px solid #ccc; }
+    button { padding: 10px 15px; background: #4CAF50; color: white; border: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2> Chat with SwiftShop Assistant</h2>
+    <div id="chatbox"></div>
+    <input type="text" id="userInput" placeholder="Ask me anything..." />
+    <button onclick="sendMessage()">Send</button>
+  </div>
+
+  <script>
+    async function sendMessage() {
+      const input = document.getElementById("userInput");
+      const msg = input.value;
+      if (!msg) return;
+      const box = document.getElementById("chatbox");
+
+      box.innerHTML += `<div class="message user">${msg}</div>`;
+      input.value = "";
+
+      const res = await fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: msg })
+      });
+
+      const data = await res.json();
+      box.innerHTML += `<div class="message bot">${data.reply}</div>`;
+      box.scrollTop = box.scrollHeight;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+id,name,category,price,stock,location,description,image
+1,Dettol Handwash,Hygiene,99,Yes,Aisle 2,Germ protection handwash with soothing fragrance,dettol.png
+2,Samsung LED TV,Electronics,24999,No,Aisle 5,32-inch smart LED TV with HD resolution,samsung-led-tv.png
+3,Parle-G Biscuits,Snacks,10,Yes,Aisle 1,Classic glucose biscuits loved for generations,parle-g.png
+4,Lakme Lipstick,Cosmetics,299,Yes,Aisle 4,Matte lipstick in cherry red finish,lakme-lipstick.png
+5,Tide Detergent,Household,150,Yes,Aisle 3,Powerful stain remover with lemon freshness,tide-detergent.png
+6,Bournvita,Health,249,Yes,Aisle 6,Health drink with chocolate flavor for energy,bournvita.png
+7,Amul Butter,Dairy,55,Yes,Aisle 7,Classic salted dairy butter,amul-butter.png
+8,Colgate Toothpaste,Hygiene,45,No,Aisle 2,Fresh mint toothpaste for strong teeth,colgate-toothpaste.png
+
+

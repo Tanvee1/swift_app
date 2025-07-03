@@ -1,6 +1,5 @@
-streamlit
 flask
 flask-cors
+openai
 pandas
-openai>=1.0.0
-python-dotenv
+gunicorn

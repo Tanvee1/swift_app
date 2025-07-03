@@ -1,5 +1,6 @@
+streamlit
 flask
 flask-cors
 pandas
 openai>=1.0.0
-python-dotenvs
+python-dotenv

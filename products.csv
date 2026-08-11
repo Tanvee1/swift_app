@@ -7,15 +7,15 @@ id,name,category,price,stock,stock_count,rating,location,description,image
 6,Bournvita,Health,249,Yes,35,4.8,Aisle 6,Chocolate malt health drink mix with essential vitamins and minerals,bournvita.png
 7,Amul Butter,Dairy,55,Yes,80,4.9,Aisle 7,Classic pasteurized salted dairy butter made from fresh cow milk,amul-butter.png
 8,Colgate Toothpaste,Hygiene,45,No,0,4.4,Aisle 2,Fresh mint fluoride toothpaste for 12-hour cavity protection,colgate-toothpaste.png
-9,Nescafe Instant Coffee,Beverages,285,Yes,50,4.8,Aisle 1,Rich aroma dark roast 100% pure instant coffee powder,dettol.png
-10,Lipton Green Tea,Beverages,180,Yes,40,4.6,Aisle 1,Natural honey lemon antioxidant green tea bags,dettol.png
-11,Organic Whole Milk,Dairy,65,Yes,75,4.9,Aisle 7,Fresh pasteurized whole cream milk from local organic farms,amul-butter.png
-12,Doritos Nacho Cheese,Snacks,50,Yes,90,4.7,Aisle 1,Crunchy tortilla chips seasoned with rich nacho cheese,parle-g.png
-13,Nivea Body Lotion,Cosmetics,349,Yes,30,4.6,Aisle 4,Deep moisture body lotion with shea butter for 48h hydration,lakme-lipstick.png
-14,Philips Air Fryer,Electronics,8999,Yes,12,4.8,Aisle 5,Rapid air technology multi-cooker for healthy oil-free cooking,samsung-led-tv.png
-15,Lysol Surface Cleaner,Household,199,Yes,55,4.7,Aisle 3,Disinfectant floor cleaner kills 99.9% of germs with citrus scent,tide-detergent.png
-16,Quaker Oats,Health,175,Yes,65,4.8,Aisle 6,100% natural wholegrain rolled oats for heart-healthy breakfast,bournvita.png
-17,Cadbury Silk Chocolate,Snacks,175,Yes,110,4.9,Aisle 1,Smooth and creamy milk chocolate bar made with premium cocoa,parle-g.png
-18,Head & Shoulders Shampoo,Hygiene,220,Yes,42,4.6,Aisle 2,Anti-dandruff shampoo with cool menthol for scalp protection,dettol.png
-19,Apple iPad Air,Electronics,54900,Yes,8,4.9,Aisle 5,10.9-inch Liquid Retina display tablet with M1 chip and Wi-Fi 6,samsung-led-tv.png
-20,Ariel Matic Detergent,Household,410,Yes,35,4.8,Aisle 3,Front load washing machine detergent powder with stain defense,tide-detergent.png
+9,Nescafe Instant Coffee,Beverages,285,Yes,50,4.8,Aisle 1,Rich aroma dark roast 100% pure instant coffee powder,nescafe-coffee.png
+10,Lipton Green Tea,Beverages,180,Yes,40,4.6,Aisle 1,Natural honey lemon antioxidant green tea bags,lipton-green-tea.png
+11,Organic Whole Milk,Dairy,65,Yes,75,4.9,Aisle 7,Fresh pasteurized whole cream milk from local organic farms,organic-milk.png
+12,Doritos Nacho Cheese,Snacks,50,Yes,90,4.7,Aisle 1,Crunchy tortilla chips seasoned with rich nacho cheese,doritos-chips.png
+13,Nivea Body Lotion,Cosmetics,349,Yes,30,4.6,Aisle 4,Deep moisture body lotion with shea butter for 48h hydration,nivea-lotion.png
+14,Philips Air Fryer,Electronics,8999,Yes,12,4.8,Aisle 5,Rapid air technology multi-cooker for healthy oil-free cooking,philips-air-fryer.png
+15,Lysol Surface Cleaner,Household,199,Yes,55,4.7,Aisle 3,Disinfectant floor cleaner kills 99.9% of germs with citrus scent,lysol-cleaner.png
+16,Quaker Oats,Health,175,Yes,65,4.8,Aisle 6,100% natural wholegrain rolled oats for heart-healthy breakfast,quaker-oats.png
+17,Cadbury Silk Chocolate,Snacks,175,Yes,110,4.9,Aisle 1,Smooth and creamy milk chocolate bar made with premium cocoa,cadbury-silk.png
+18,Head & Shoulders Shampoo,Hygiene,220,Yes,42,4.6,Aisle 2,Anti-dandruff shampoo with cool menthol for scalp protection,head-shoulders.png
+19,Apple iPad Air,Electronics,54900,Yes,8,4.9,Aisle 5,10.9-inch Liquid Retina display tablet with M1 chip and Wi-Fi 6,apple-ipad-air.png
+20,Ariel Matic Detergent,Household,410,Yes,35,4.8,Aisle 3,Front load washing machine detergent powder with stain defense,ariel-detergent.png

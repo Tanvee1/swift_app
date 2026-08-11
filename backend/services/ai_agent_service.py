@@ -27,19 +27,8 @@ class AIAgentService:
     def process_user_message(self, session_id: str, user_message: str) -> Tuple[str, List[Dict[str, Any]]]:
         self.add_message(session_id, "user", user_message)
         clean_msg = user_message.lower().strip()
-        from datetime import datetime
-        now = datetime.now()
-
-        # 0. Check explicit conversational / general QA triggers first
-        if "date" in clean_msg or "today" in clean_msg:
-            reply = f"Today's date is **{now.strftime('%A, %B %d, %Y')}**."
-            self.add_message(session_id, "assistant", reply)
-            return reply, []
-        elif "time" in clean_msg:
-            reply = f"The current time is **{now.strftime('%I:%M %p')}**."
-            self.add_message(session_id, "assistant", reply)
-            return reply, []
-        elif any(w in clean_msg for w in ["hi", "hello", "hey", "greetings"]):
+        # 0. Check retail assistance intent triggers
+        if any(w in clean_msg for w in ["hi", "hello", "hey", "greetings"]):
             reply = "Hello! Welcome to SwiftShop. I can help you locate products, check aisle locations, view prices, or check stock availability."
             self.add_message(session_id, "assistant", reply)
             return reply, []

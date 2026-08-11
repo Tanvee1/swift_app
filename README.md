@@ -13,10 +13,10 @@
 
 ## 🌟 Key Features & Production Engineering
 
-### 🔍 1. Hybrid RAG Vector Search & Intent Routing Engine
+### 🔍 1. Hybrid RAG Vector Search & Intent Engine
 - **TF-IDF + Cosine Similarity**: Custom pure-Python vector space model computing TF-IDF weights and normalized vector inner products over product names, categories, descriptions, and aisle locations without external C-extensions.
 - **Intent Extraction Pipeline**: Intelligent regex parsing for budget constraints (*"items under ₹150"*), aisle spatial queries (*"where is aisle 2"*), and stock status filters (*"in stock hygiene"*).
-- **Conversational Intent Router**: Fast-path intent classifier intercepting general QA (date/time, greetings, store timing, store map) before running vector catalog matching to eliminate false positives.
+- **Retail Intent Router**: Direct intent classifier handling store navigation, operating hours, and greetings prior to executing vector catalog matching.
 
 ### 💬 2. Multi-Turn AI Agent & Function Calling
 - **Session Memory State**: Maintains multi-turn conversation trajectories per user session (`session_id`).
@@ -43,9 +43,9 @@ graph TD
     FlaskApp --> Blueprints[Flask Blueprints]
     
     subgraph Backend Services Layer
-        Blueprints -->|Route: /api/chat| IntentRouter[Conversational Intent Router]
-        IntentRouter -->|General QA: Date/Time/Map| DirectReply[Instant Response Generator]
-        IntentRouter -->|Shopping Query| VectorSearch[TF-IDF Vector Search Engine]
+        Blueprints -->|Route: /api/chat| IntentRouter[Retail Intent Router]
+        IntentRouter -->|Store Navigation / Hours| DirectReply[Instant Store Info Reply]
+        IntentRouter -->|Catalog Query| VectorSearch[TF-IDF Vector Search Engine]
         VectorSearch -->|Cosine Similarity| ProductDB[(CSV Product Inventory)]
         Blueprints -->|Route: /api/cart/calculate| CartService[Cart Financial Engine]
     end
@@ -77,7 +77,7 @@ swift_app/
 │   │   └── view_routes.py      # HTML Page Renderers (Home, Assistant, Trending, Map)
 │   └── services/
 │       ├── search_service.py   # Pure-Python TF-IDF Vector Cosine Similarity Search Engine
-│       └── ai_agent_service.py # Multi-Turn AI Agent & Intent Router
+│       └── ai_agent_service.py # Multi-Turn AI Agent & Retail Intent Router
 ├── tests/
 │   ├── test_search.py          # Unit tests for Vector Search, Intent Parser & Cosine Similarity
 │   └── test_api.py             # Integration tests for REST API contracts & Financial Cart logic

@@ -146,14 +146,16 @@ class SearchService:
                 elif token in p_desc_lower:
                     t_score += 0.8
 
-            total_score = v_score + t_score + (prod.rating * 0.1)
-            
-            if total_score > 0.15 or (s_filter.aisle or s_filter.max_price is not None):
+            match_score = v_score + t_score
+            if match_score > 0.4 or (s_filter.aisle or s_filter.max_price is not None):
+                total_score = match_score + (prod.rating * 0.1)
                 scored_results.append((total_score, prod))
 
-        if not scored_results and not s_filter.aisle and s_filter.max_price is None:
+        if not scored_results and (s_filter.aisle or s_filter.max_price is not None):
+            pass
+        elif not scored_results and tokens:
             product_names = [p.name.lower() for p in self.products]
-            close = difflib.get_close_matches(raw_query.lower(), product_names, n=3, cutoff=0.3)
+            close = difflib.get_close_matches(raw_query.lower(), product_names, n=3, cutoff=0.4)
             for p in self.products:
                 if p.name.lower() in close:
                     scored_results.append((1.0, p))

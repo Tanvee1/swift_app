@@ -32,7 +32,7 @@ class AIAgentService:
         matched_dicts = [p.to_dict() for p in matched_products]
 
         # Formulate formatted reply for product search hits
-        if matched_products and (s_filter.aisle or s_filter.max_price is not None or any(len(w) > 3 for w in user_message.split())):
+        if matched_products and (s_filter.aisle or s_filter.max_price is not None or len(matched_products) > 0):
             if s_filter.aisle:
                 reply = f"I found **{len(matched_products)}** item(s) in **{s_filter.aisle.title()}**:\n"
             elif s_filter.max_price:
@@ -74,8 +74,15 @@ class AIAgentService:
 
         # 3. Rule-based Smart Fallback Assistant
         clean_msg = user_message.lower().strip()
+        from datetime import datetime
+        now = datetime.now()
+
         if any(w in clean_msg for w in ["hi", "hello", "hey", "greetings"]):
             reply = "Hello! Welcome to SwiftShop. I can help you locate products, check aisle locations, view prices, or check stock availability."
+        elif "date" in clean_msg or "today" in clean_msg or "day" in clean_msg:
+            reply = f"Today's date is **{now.strftime('%A, %B %d, %Y')}**."
+        elif "time" in clean_msg:
+            reply = f"The current time is **{now.strftime('%I:%M %p')}**."
         elif "map" in clean_msg or "layout" in clean_msg or ("where" in clean_msg and "store" in clean_msg):
             reply = "You can check our interactive store layout on the Store Map page. Aisles range from Aisle 1 (Snacks) to Aisle 7 (Dairy)."
         elif "hours" in clean_msg or "open" in clean_msg or "timing" in clean_msg:

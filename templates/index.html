@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SwiftShop – Intelligent Retail Experience</title>
+  <title>SwiftShop – Enterprise AI Retail Platform</title>
   <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
@@ -36,10 +36,10 @@
     <!-- Hero Banner -->
     <div class="hero">
       <h1>Smart Shopping, Reimagined</h1>
-      <p>Discover products, check aisle locations in real time, and chat with our retail assistant for instant inventory answers.</p>
+      <p>Discover products, check real-time store availability, and chat with our RAG-powered vector AI assistant for tailored recommendations.</p>
       
       <form action="/chat" method="GET" class="search-box">
-        <input type="text" name="q" placeholder="Search products or ask: 'Where is Dettol?' or 'Snacks under ₹100'...">
+        <input type="text" name="q" placeholder="Search products or ask: 'Where is Dettol?' or 'Snacks under ₹100'..." autocomplete="off">
         <button type="submit">Ask Assistant</button>
       </form>
     </div>
@@ -57,6 +57,7 @@
             <span class="badge-stock {% if product.stock_status == 'In Stock' %}in-stock{% else %}out-stock{% endif %}">
               {{ product.stock_status }}
             </span>
+            <span class="rating-pill">★ {{ product.rating }}</span>
             <img src="/static/assets/{{ product.image }}" alt="{{ product.name }}" onerror="this.src='https://via.placeholder.com/150?text=Product'">
           </div>
           <div class="card-body">
@@ -67,7 +68,7 @@
               <span class="price">₹{{ product.price }}</span>
               <span class="aisle-tag">{{ product.location }}</span>
             </div>
-            <button class="btn-shelve" data-shelf-item="{{ product.name }}" onclick="toggleShelf('{{ product.name|escape }}', '{{ product.price }}', '{{ product.category|escape }}', '{{ product.image }}')">
+            <button class="btn-shelve" data-shelf-item="{{ product.name }}" onclick="toggleShelf('{{ product.name|escape }}', '{{ product.price }}', '{{ product.category|escape }}', '{{ product.image }}', '{{ product.id }}')">
               + Shelve
             </button>
           </div>
@@ -89,6 +90,7 @@
             <span class="badge-stock {% if product.stock_status == 'In Stock' %}in-stock{% else %}out-stock{% endif %}">
               {{ product.stock_status }}
             </span>
+            <span class="rating-pill">★ {{ product.rating }}</span>
             <img src="/static/assets/{{ product.image }}" alt="{{ product.name }}" onerror="this.src='https://via.placeholder.com/150?text=Product'">
           </div>
           <div class="card-body">
@@ -99,7 +101,7 @@
               <span class="price">₹{{ product.price }}</span>
               <span class="aisle-tag">{{ product.location }}</span>
             </div>
-            <button class="btn-shelve" data-shelf-item="{{ product.name }}" onclick="toggleShelf('{{ product.name|escape }}', '{{ product.price }}', '{{ product.category|escape }}', '{{ product.image }}')">
+            <button class="btn-shelve" data-shelf-item="{{ product.name }}" onclick="toggleShelf('{{ product.name|escape }}', '{{ product.price }}', '{{ product.category|escape }}', '{{ product.image }}', '{{ product.id }}')">
               + Shelve
             </button>
           </div>
@@ -119,6 +121,7 @@
     </div>
     <div class="drawer-body">
       <ul class="shelf-items-list" id="drawerShelfList"></ul>
+      <div id="cartSummaryContainer"></div>
     </div>
   </div>
 

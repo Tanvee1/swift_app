@@ -1,11 +1,21 @@
-id,name,category,price,stock,location,description,image
-1,Dettol Handwash,Hygiene,99,Yes,Aisle 2,Germ protection handwash with soothing fragrance,dettol.png
-2,Samsung LED TV,Electronics,24999,No,Aisle 5,32-inch smart LED TV with HD resolution,samsung-led-tv.png
-3,Parle-G Biscuits,Snacks,10,Yes,Aisle 1,Classic glucose biscuits loved for generations,parle-g.png
-4,Lakme Lipstick,Cosmetics,299,Yes,Aisle 4,Matte lipstick in cherry red finish,lakme-lipstick.png
-5,Tide Detergent,Household,150,Yes,Aisle 3,Powerful stain remover with lemon freshness,tide-detergent.png
-6,Bournvita,Health,249,Yes,Aisle 6,Health drink with chocolate flavor for energy,bournvita.png
-7,Amul Butter,Dairy,55,Yes,Aisle 7,Classic salted dairy butter,amul-butter.png
-8,Colgate Toothpaste,Hygiene,45,No,Aisle 2,Fresh mint toothpaste for strong teeth,colgate-toothpaste.png
-
-
+id,name,category,price,stock,stock_count,rating,location,description,image
+1,Dettol Handwash,Hygiene,99,Yes,45,4.8,Aisle 2,Germ protection antibacterial liquid handwash with soothing fragrance,dettol.png
+2,Samsung LED TV,Electronics,24999,No,0,4.6,Aisle 5,32-inch smart LED TV with HD resolution and Dolby Audio,samsung-led-tv.png
+3,Parle-G Biscuits,Snacks,10,Yes,120,4.9,Aisle 1,Classic glucose biscuits enriched with wheat and milk,parle-g.png
+4,Lakme Lipstick,Cosmetics,299,Yes,28,4.5,Aisle 4,Matte lipstick in cherry red finish with long-lasting hydration,lakme-lipstick.png
+5,Tide Detergent,Household,150,Yes,60,4.7,Aisle 3,Powerful stain remover powder with lemon and mint freshness,tide-detergent.png
+6,Bournvita,Health,249,Yes,35,4.8,Aisle 6,Chocolate malt health drink mix with essential vitamins and minerals,bournvita.png
+7,Amul Butter,Dairy,55,Yes,80,4.9,Aisle 7,Classic pasteurized salted dairy butter made from fresh cow milk,amul-butter.png
+8,Colgate Toothpaste,Hygiene,45,No,0,4.4,Aisle 2,Fresh mint fluoride toothpaste for 12-hour cavity protection,colgate-toothpaste.png
+9,Nescafe Instant Coffee,Beverages,285,Yes,50,4.8,Aisle 1,Rich aroma dark roast 100% pure instant coffee powder,dettol.png
+10,Lipton Green Tea,Beverages,180,Yes,40,4.6,Aisle 1,Natural honey lemon antioxidant green tea bags,dettol.png
+11,Organic Whole Milk,Dairy,65,Yes,75,4.9,Aisle 7,Fresh pasteurized whole cream milk from local organic farms,amul-butter.png
+12,Doritos Nacho Cheese,Snacks,50,Yes,90,4.7,Aisle 1,Crunchy tortilla chips seasoned with rich nacho cheese,parle-g.png
+13,Nivea Body Lotion,Cosmetics,349,Yes,30,4.6,Aisle 4,Deep moisture body lotion with shea butter for 48h hydration,lakme-lipstick.png
+14,Philips Air Fryer,Electronics,8999,Yes,12,4.8,Aisle 5,Rapid air technology multi-cooker for healthy oil-free cooking,samsung-led-tv.png
+15,Lysol Surface Cleaner,Household,199,Yes,55,4.7,Aisle 3,Disinfectant floor cleaner kills 99.9% of germs with citrus scent,tide-detergent.png
+16,Quaker Oats,Health,175,Yes,65,4.8,Aisle 6,100% natural wholegrain rolled oats for heart-healthy breakfast,bournvita.png
+17,Cadbury Silk Chocolate,Snacks,175,Yes,110,4.9,Aisle 1,Smooth and creamy milk chocolate bar made with premium cocoa,parle-g.png
+18,Head & Shoulders Shampoo,Hygiene,220,Yes,42,4.6,Aisle 2,Anti-dandruff shampoo with cool menthol for scalp protection,dettol.png
+19,Apple iPad Air,Electronics,54900,Yes,8,4.9,Aisle 5,10.9-inch Liquid Retina display tablet with M1 chip and Wi-Fi 6,samsung-led-tv.png
+20,Ariel Matic Detergent,Household,410,Yes,35,4.8,Aisle 3,Front load washing machine detergent powder with stain defense,tide-detergent.png

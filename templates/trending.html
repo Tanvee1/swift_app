@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Trending Products – SwiftShop</title>
+  <title>Trending Inventory – SwiftShop</title>
   <link rel="stylesheet" href="/static/styles.css">
   <style>
     .filter-bar {
@@ -81,7 +81,7 @@
     <div class="section-header">
       <div>
         <h1 class="section-title">Trending Inventory</h1>
-        <p style="color: var(--text-muted); font-size: 0.95rem;">Explore items, live stock status, and aisle locations across all departments.</p>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">Explore items, live stock status, ratings, and aisle locations across all departments.</p>
       </div>
     </div>
 
@@ -96,12 +96,14 @@
         <button class="pill" onclick="filterCategory('Household', this)">Household</button>
         <button class="pill" onclick="filterCategory('Health', this)">Health</button>
         <button class="pill" onclick="filterCategory('Dairy', this)">Dairy</button>
+        <button class="pill" onclick="filterCategory('Beverages', this)">Beverages</button>
       </div>
 
       <div class="filter-controls">
         <input type="text" id="searchInput" placeholder="Search catalog..." oninput="applyFilters()" />
         <select id="sortSelect" onchange="applyFilters()">
           <option value="default">Sort by: Popularity</option>
+          <option value="rating">Highest Rated</option>
           <option value="low-high">Price: Low to High</option>
           <option value="high-low">Price: High to Low</option>
         </select>
@@ -114,11 +116,13 @@
       <div class="card product-card-item" 
            data-name="{{ product.name|lower }}" 
            data-category="{{ product.category }}" 
-           data-price="{{ product.price }}">
+           data-price="{{ product.price }}"
+           data-rating="{{ product.rating }}">
         <div class="card-img-wrap">
           <span class="badge-stock {% if product.stock_status == 'In Stock' %}in-stock{% else %}out-stock{% endif %}">
             {{ product.stock_status }}
           </span>
+          <span class="rating-pill">★ {{ product.rating }}</span>
           <img src="/static/assets/{{ product.image }}" alt="{{ product.name }}" onerror="this.src='https://via.placeholder.com/150?text=Product'">
         </div>
         <div class="card-body">
@@ -129,7 +133,7 @@
             <span class="price">₹{{ product.price }}</span>
             <span class="aisle-tag">{{ product.location }}</span>
           </div>
-          <button class="btn-shelve" data-shelf-item="{{ product.name }}" onclick="toggleShelf('{{ product.name|escape }}', '{{ product.price }}', '{{ product.category|escape }}', '{{ product.image }}')">
+          <button class="btn-shelve" data-shelf-item="{{ product.name }}" onclick="toggleShelf('{{ product.name|escape }}', '{{ product.price }}', '{{ product.category|escape }}', '{{ product.image }}', '{{ product.id }}')">
             + Shelve
           </button>
         </div>
@@ -148,6 +152,7 @@
     </div>
     <div class="drawer-body">
       <ul class="shelf-items-list" id="drawerShelfList"></ul>
+      <div id="cartSummaryContainer"></div>
     </div>
   </div>
 
@@ -191,6 +196,8 @@
         cards.sort((a, b) => parseFloat(a.getAttribute("data-price")) - parseFloat(b.getAttribute("data-price")));
       } else if (sort === "high-low") {
         cards.sort((a, b) => parseFloat(b.getAttribute("data-price")) - parseFloat(a.getAttribute("data-price")));
+      } else if (sort === "rating") {
+        cards.sort((a, b) => parseFloat(b.getAttribute("data-rating")) - parseFloat(a.getAttribute("data-rating")));
       }
 
       cards.forEach(card => grid.appendChild(card));

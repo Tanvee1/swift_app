@@ -1,86 +1,132 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>SwiftShop – Mood Shopping</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SwiftShop – Intelligent Retail Experience</title>
   <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
-  <div class="container">
-    <h1> Welcome to SwiftShop</h1>
-    <p>Your intelligent shopping experience, reimagined.</p>
 
-    <!-- Mood Section 1 -->
-    <div class="mood-section">
-      <h2> Daily utility</h2>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <a href="/" class="brand">
+      <div class="brand-logo-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+      </div>
+      <span>SwiftShop</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/" class="nav-link active">Home</a></li>
+      <li><a href="/chat" class="nav-link">Assistant</a></li>
+      <li><a href="/trending" class="nav-link">Trending</a></li>
+      <li><a href="/map" class="nav-link">Store Map</a></li>
+      <li>
+        <button class="nav-link shelf-trigger" id="shelfTriggerBtn">
+          <span>Shelf</span>
+          <span class="badge shelf-count-badge">0</span>
+        </button>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    
+    <!-- Hero Banner -->
+    <div class="hero">
+      <h1>Smart Shopping, Reimagined</h1>
+      <p>Discover products, check aisle locations in real time, and chat with our retail assistant for instant inventory answers.</p>
+      
+      <form action="/chat" method="GET" class="search-box">
+        <input type="text" name="q" placeholder="Search products or ask: 'Where is Dettol?' or 'Snacks under ₹100'...">
+        <button type="submit">Ask Assistant</button>
+      </form>
+    </div>
+
+    <!-- Daily Utility Section -->
+    <div class="reel-container">
+      <div class="section-header">
+        <h2 class="section-title">Daily Utilities & Essentials</h2>
+        <a href="/trending" class="nav-link">View All &rarr;</a>
+      </div>
       <div class="reel">
+        {% for product in daily_utility %}
         <div class="card">
-          <img src="/static/assets/tide-detergent.png" />
-          <p>Tide Detergent – ₹150</p>
-          <button onclick="shelve('Tide Detergent')">➕ Shelve</button>
+          <div class="card-img-wrap">
+            <span class="badge-stock {% if product.stock_status == 'In Stock' %}in-stock{% else %}out-stock{% endif %}">
+              {{ product.stock_status }}
+            </span>
+            <img src="/static/assets/{{ product.image }}" alt="{{ product.name }}" onerror="this.src='https://via.placeholder.com/150?text=Product'">
+          </div>
+          <div class="card-body">
+            <div class="card-category">{{ product.category }}</div>
+            <h3 class="card-title">{{ product.name }}</h3>
+            <p class="card-desc">{{ product.description }}</p>
+            <div class="card-meta">
+              <span class="price">₹{{ product.price }}</span>
+              <span class="aisle-tag">{{ product.location }}</span>
+            </div>
+            <button class="btn-shelve" data-shelf-item="{{ product.name }}" onclick="toggleShelf('{{ product.name|escape }}', '{{ product.price }}', '{{ product.category|escape }}', '{{ product.image }}')">
+              + Shelve
+            </button>
+          </div>
         </div>
-        <div class="card">
-          <img src="/static/assets/amul-butter.png" />
-          <p>Amul Butter – ₹55</p>
-          <button onclick="shelve('Amul Butter')">➕ Shelve</button>
-        </div>
+        {% endfor %}
       </div>
     </div>
 
-    <!-- Mood Section 2 -->
-    <div class="mood-section">
-      <h2> Craving Something Sweet?</h2>
+    <!-- Sweets & Lifestyle Section -->
+    <div class="reel-container">
+      <div class="section-header">
+        <h2 class="section-title">Sweets & Lifestyle</h2>
+        <a href="/trending" class="nav-link">View All &rarr;</a>
+      </div>
       <div class="reel">
+        {% for product in sweets_snacks %}
         <div class="card">
-          <img src="/static/assets/parle-g.png" />
-          <p>Parle-G – ₹10</p>
-          <button onclick="shelve('Parle-G')">➕ Shelve</button>
+          <div class="card-img-wrap">
+            <span class="badge-stock {% if product.stock_status == 'In Stock' %}in-stock{% else %}out-stock{% endif %}">
+              {{ product.stock_status }}
+            </span>
+            <img src="/static/assets/{{ product.image }}" alt="{{ product.name }}" onerror="this.src='https://via.placeholder.com/150?text=Product'">
+          </div>
+          <div class="card-body">
+            <div class="card-category">{{ product.category }}</div>
+            <h3 class="card-title">{{ product.name }}</h3>
+            <p class="card-desc">{{ product.description }}</p>
+            <div class="card-meta">
+              <span class="price">₹{{ product.price }}</span>
+              <span class="aisle-tag">{{ product.location }}</span>
+            </div>
+            <button class="btn-shelve" data-shelf-item="{{ product.name }}" onclick="toggleShelf('{{ product.name|escape }}', '{{ product.price }}', '{{ product.category|escape }}', '{{ product.image }}')">
+              + Shelve
+            </button>
+          </div>
         </div>
-        <div class="card">
-          <img src="/static/assets/bournvita.png" />
-          <p>Bournvita – ₹249</p>
-          <button onclick="shelve('Bournvita')">➕ Shelve</button>
-        </div>
+        {% endfor %}
       </div>
     </div>
 
-    <div class="shelf-preview">
-      <h3>🧺 Shelfed Items</h3>
-      <ul id="shelfList"></ul>
-    </div>
+  </main>
 
-    <div class="actions">
-      <a href="/chat" class="button">💬 Ask Assistant</a>
-      <a href="/trending" class="button">📈 See Trends</a>
-      <a href="/map" class="button">🗺️ Store Map</a>
+  <!-- Slide-out Shelf Drawer -->
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <div class="drawer" id="shelfDrawer">
+    <div class="drawer-header">
+      <h3 class="drawer-title">Shelved Items (<span class="shelf-count-badge">0</span>)</h3>
+      <button class="close-btn" id="drawerCloseBtn">&times;</button>
+    </div>
+    <div class="drawer-body">
+      <ul class="shelf-items-list" id="drawerShelfList"></ul>
     </div>
   </div>
 
-  <script>
-  const shelf = [];
+  <!-- Floating AI Assistant Launcher -->
+  <a href="/chat" class="floating-chat-btn" title="Open Assistant">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+  </a>
 
-  function shelve(item) {
-    const idx = shelf.indexOf(item);
-    const list = document.getElementById("shelfList");
-
-    if (idx === -1) {
-      shelf.push(item);
-      const li = document.createElement("li");
-      li.textContent = item;
-      li.id = item.replace(/\s+/g, "_");
-      li.onclick = () => unshelve(item);
-      list.appendChild(li);
-    }
-  }
-
-  function unshelve(item) {
-    const idx = shelf.indexOf(item);
-    if (idx !== -1) {
-      shelf.splice(idx, 1);
-      const li = document.getElementById(item.replace(/\s+/g, "_"));
-      if (li) li.remove();
-    }
-  }
-</script>
-
+  <script src="/static/script.js"></script>
 </body>
 </html>

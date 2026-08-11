@@ -26,8 +26,33 @@ class AIAgentService:
 
     def process_user_message(self, session_id: str, user_message: str) -> Tuple[str, List[Dict[str, Any]]]:
         self.add_message(session_id, "user", user_message)
-        
-        # 1. First run Hybrid Search Service to find catalog hits
+        clean_msg = user_message.lower().strip()
+        from datetime import datetime
+        now = datetime.now()
+
+        # 0. Check explicit conversational / general QA triggers first
+        if "date" in clean_msg or "today" in clean_msg:
+            reply = f"Today's date is **{now.strftime('%A, %B %d, %Y')}**."
+            self.add_message(session_id, "assistant", reply)
+            return reply, []
+        elif "time" in clean_msg:
+            reply = f"The current time is **{now.strftime('%I:%M %p')}**."
+            self.add_message(session_id, "assistant", reply)
+            return reply, []
+        elif any(w in clean_msg for w in ["hi", "hello", "hey", "greetings"]):
+            reply = "Hello! Welcome to SwiftShop. I can help you locate products, check aisle locations, view prices, or check stock availability."
+            self.add_message(session_id, "assistant", reply)
+            return reply, []
+        elif "map" in clean_msg or "layout" in clean_msg or ("where" in clean_msg and "store" in clean_msg):
+            reply = "You can check our interactive store layout on the Store Map page. Aisles range from Aisle 1 (Snacks) to Aisle 7 (Dairy)."
+            self.add_message(session_id, "assistant", reply)
+            return reply, []
+        elif "hours" in clean_msg or "open" in clean_msg or "timing" in clean_msg:
+            reply = "SwiftShop is open daily from 8:00 AM to 10:00 PM."
+            self.add_message(session_id, "assistant", reply)
+            return reply, []
+
+        # 1. Run Hybrid Search Service to find catalog hits
         matched_products, s_filter = self.search_service.search(user_message, limit=4)
         matched_dicts = [p.to_dict() for p in matched_products]
 

@@ -154,11 +154,22 @@ class SearchService:
         if not scored_results and (s_filter.aisle or s_filter.max_price is not None):
             pass
         elif not scored_results and tokens:
-            product_names = [p.name.lower() for p in self.products]
-            close = difflib.get_close_matches(raw_query.lower(), product_names, n=3, cutoff=0.4)
+            all_words = set()
             for p in self.products:
-                if p.name.lower() in close:
-                    scored_results.append((1.0, p))
+                all_words.update(self._tokenize(p.name))
+                all_words.update(self._tokenize(p.category))
+
+            matched_products_set = set()
+            for token in tokens:
+                close_words = difflib.get_close_matches(token, list(all_words), n=1, cutoff=0.75)
+                if close_words:
+                    target_word = close_words[0]
+                    for p in self.products:
+                        if target_word in p.name.lower() or target_word in p.category.lower():
+                            matched_products_set.add(p)
+
+            for p in matched_products_set:
+                scored_results.append((1.0, p))
 
         scored_results.sort(key=lambda x: x[0], reverse=True)
         final_products = [prod for score, prod in scored_results]

@@ -3,8 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Store Map & Aisle Directory – SwiftShop</title>
+  <meta name="color-scheme" content="light dark">
+  <title>Interactive Store Map – SwiftShop</title>
   <link rel="stylesheet" href="/static/styles.css">
+  <script>
+    (function() {
+      const saved = localStorage.getItem('swift_theme');
+      if (saved) {
+        document.documentElement.setAttribute('data-theme', saved);
+      } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
 </head>
 <body>
 
@@ -27,68 +38,43 @@
           <span class="badge shelf-count-badge">0</span>
         </button>
       </li>
+      <li>
+        <button class="theme-toggle-btn" id="themeToggleBtn" title="Toggle theme">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+      </li>
     </ul>
   </nav>
 
   <main class="main-content">
-    
-    <div class="map-container">
-      <h1 class="section-title" style="justify-content: center; margin-bottom: 0.5rem;">Store Layout & Aisle Directory</h1>
-      <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Locate sections quickly or ask our assistant for exact shelf numbers.</p>
-
-      <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: 2rem;">
-        <img src="/static/assets/store-map.png" alt="SwiftShop Store Layout" class="map-img" onerror="this.style.display='none'; document.getElementById('mapFallback').style.display='block';">
-        <div id="mapFallback" style="display:none; padding: 2rem; color: var(--text-muted);">
-          Store Map Overview: Aisle 1 (Front Entry) to Aisle 7 (Back Cold Storage)
-        </div>
+    <div class="section-header">
+      <div>
+        <h1 class="section-title">Interactive Store Floorplan</h1>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">Select any department aisle below to view inventory locations and trigger instant AI assistance.</p>
       </div>
+    </div>
 
-      <!-- Aisle Directory Breakdown -->
-      <h2 style="font-size: 1.15rem; font-weight: 700; text-align: left; margin-bottom: 1rem;">Aisle Department Breakdown</h2>
+    <!-- Store Map Box -->
+    <div class="map-container">
+      <img src="/static/assets/store-map.png" alt="Store Blueprint Layout" class="map-img">
       
       <div class="aisle-grid">
-        {% for aisle, items in aisles.items() %}
-        <div class="aisle-card">
-          <h4>{{ aisle }}</h4>
-          <p>Contains: <strong>{{ items | join(', ') }}</strong></p>
-          <a href="/chat?q=where is {{ aisle }}" style="display:inline-block; margin-top:8px; font-size:0.8rem; color:var(--primary); text-decoration:none; font-weight:700;">
-            Ask AI about {{ aisle }} &rarr;
+        {% for aisle_name, items in aisles.items() %}
+        <div class="aisle-card" onclick="selectAisle('{{ aisle_name }}', this)">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+            <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--primary);">{{ aisle_name }}</h3>
+            <span class="badge" style="background: var(--primary-light); color: var(--primary); font-size: 0.75rem;">{{ items|length }} Items</span>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+            <strong>Department Products:</strong> {{ items|join(', ') }}
+          </p>
+          <a href="/chat?q={{ aisle_name|urlencode }}" class="nav-link" style="padding: 0; margin-top: 0.6rem; color: var(--primary); font-weight: 700;">
+            Ask AI about {{ aisle_name }} &rarr;
           </a>
-        </div>
-        {% else %}
-        <div class="aisle-card">
-          <h4>Aisle 1 - Snacks & Biscuits</h4>
-          <p>Parle-G, Chips, Munchies</p>
-        </div>
-        <div class="aisle-card">
-          <h4>Aisle 2 - Hygiene & Personal Care</h4>
-          <p>Dettol, Colgate, Handwashes</p>
-        </div>
-        <div class="aisle-card">
-          <h4>Aisle 3 - Household Essentials</h4>
-          <p>Tide Detergent, Cleaning Supplies</p>
-        </div>
-        <div class="aisle-card">
-          <h4>Aisle 4 - Cosmetics</h4>
-          <p>Lakme Lipstick, Skincare</p>
-        </div>
-        <div class="aisle-card">
-          <h4>Aisle 5 - Consumer Electronics</h4>
-          <p>Samsung LED TV, Smart Appliances</p>
-        </div>
-        <div class="aisle-card">
-          <h4>Aisle 6 - Health & Wellness</h4>
-          <p>Bournvita, Health Drinks</p>
-        </div>
-        <div class="aisle-card">
-          <h4>Aisle 7 - Dairy & Refrigerator</h4>
-          <p>Amul Butter, Milk, Cheese</p>
         </div>
         {% endfor %}
       </div>
-
     </div>
-
   </main>
 
   <!-- Slide-out Shelf Drawer -->
@@ -100,14 +86,17 @@
     </div>
     <div class="drawer-body">
       <ul class="shelf-items-list" id="drawerShelfList"></ul>
+      <div id="cartSummaryContainer"></div>
     </div>
   </div>
 
-  <!-- Floating AI Assistant Launcher -->
-  <a href="/chat" class="floating-chat-btn" title="Open Assistant">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-  </a>
-
   <script src="/static/script.js"></script>
+  <script>
+    function selectAisle(aisleName, card) {
+      document.querySelectorAll('.aisle-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      showToast(`Selected ${aisleName}`);
+    }
+  </script>
 </body>
 </html>

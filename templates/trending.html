@@ -3,8 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
   <title>Trending Inventory – SwiftShop</title>
   <link rel="stylesheet" href="/static/styles.css">
+  <script>
+    (function() {
+      const saved = localStorage.getItem('swift_theme');
+      if (saved) {
+        document.documentElement.setAttribute('data-theme', saved);
+      } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
   <style>
     .filter-bar {
       display: flex;
@@ -13,10 +24,10 @@
       align-items: center;
       justify-content: space-between;
       margin-bottom: 2rem;
-      background: white;
+      background: var(--surface);
       padding: 1rem 1.5rem;
       border-radius: var(--radius-md);
-      box-shadow: var(--shadow-sm);
+      box-shadow: var(--card-shadow);
       border: 1px solid var(--border);
     }
     .category-pills {
@@ -25,8 +36,9 @@
       flex-wrap: wrap;
     }
     .pill {
-      background: var(--bg);
-      border: 1px solid var(--border);
+      background: var(--chip-bg);
+      color: var(--chip-text);
+      border: 1px solid var(--chip-border);
       padding: 0.4rem 0.9rem;
       border-radius: 99px;
       font-size: 0.85rem;
@@ -35,9 +47,9 @@
       transition: var(--transition);
     }
     .pill.active, .pill:hover {
-      background: var(--primary);
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
       color: white;
-      border-color: var(--primary);
+      border-color: transparent;
     }
     .filter-controls {
       display: flex;
@@ -47,6 +59,8 @@
     .filter-controls input, .filter-controls select {
       padding: 0.5rem 0.85rem;
       border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
       border-radius: var(--radius-sm);
       font-family: inherit;
       font-size: 0.88rem;
@@ -72,6 +86,11 @@
         <button class="nav-link shelf-trigger" id="shelfTriggerBtn">
           <span>Shelf</span>
           <span class="badge shelf-count-badge">0</span>
+        </button>
+      </li>
+      <li>
+        <button class="theme-toggle-btn" id="themeToggleBtn" title="Toggle theme">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
         </button>
       </li>
     </ul>

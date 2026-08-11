@@ -3,8 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Retail Assistant – SwiftShop</title>
+  <meta name="color-scheme" content="light dark">
+  <title>AI Shopping Assistant – SwiftShop</title>
   <link rel="stylesheet" href="/static/styles.css">
+  <script>
+    (function() {
+      const saved = localStorage.getItem('swift_theme');
+      if (saved) {
+        document.documentElement.setAttribute('data-theme', saved);
+      } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
 </head>
 <body>
 
@@ -27,59 +38,59 @@
           <span class="badge shelf-count-badge">0</span>
         </button>
       </li>
+      <li>
+        <button class="theme-toggle-btn" id="themeToggleBtn" title="Toggle theme">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+      </li>
     </ul>
   </nav>
 
-  <main class="main-content">
+  <main class="main-content" style="padding-top: 1rem;">
     <div class="chat-container">
       
       <!-- Chat Header -->
       <div class="chat-header">
         <div class="chat-header-info">
-          <div class="bot-avatar-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><rect x="4" y="8" width="16" height="12" rx="2"></rect><path d="M9 13v2"></path><path d="M15 13v2"></path></svg>
-          </div>
+          <div class="bot-avatar-icon">AI</div>
           <div class="chat-title-group">
-            <h3>SwiftShop Smart Assistant</h3>
+            <h3>SwiftShop AI Assistant</h3>
             <div class="chat-status">
               <span class="status-dot"></span>
-              <span>Online • Live Inventory Connected</span>
+              <span>Vector TF-IDF RAG & Tool Engine Online</span>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Messages Area -->
-      <div class="chat-messages" id="chatbox">
+      <div class="chat-messages" id="chatMessages">
         <div class="msg-wrapper bot">
-          <div class="msg-avatar-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><rect x="4" y="8" width="16" height="12" rx="2"></rect><path d="M9 13v2"></path><path d="M15 13v2"></path></svg>
-          </div>
-          <div class="msg-bubble">Hello! I'm your SwiftShop Assistant.
-I can help you locate products, check aisle numbers, verify live stock availability, or find budget options!</div>
+          <div class="msg-avatar-icon">AI</div>
+          <div class="msg-bubble">Hello! Welcome to SwiftShop. I am your RAG-powered vector AI retail assistant. Ask me to find items (*"Where is Dettol?"*), query budget picks (*"Items under ₹100"*), or locate aisles!</div>
         </div>
       </div>
 
-      <!-- Quick Suggestion Chips -->
+      <!-- Quick Query Suggestions -->
       <div class="quick-chips-container">
-        <div class="chips-label">SUGGESTED QUERIES</div>
+        <div class="chips-label">Suggested Queries</div>
         <div class="quick-chips">
-          <button class="chip" onclick="sendQuickPrompt('Where is Dettol?')">Where is Dettol?</button>
-          <button class="chip" onclick="sendQuickPrompt('Snacks under 100')">Snacks under ₹100</button>
-          <button class="chip" onclick="sendQuickPrompt('Do you have Amul Butter in stock?')">Amul Butter stock</button>
-          <button class="chip" onclick="sendQuickPrompt('Where is Aisle 3?')">Aisle 3 items</button>
-          <button class="chip" onclick="sendQuickPrompt('Show me cosmetics')">Cosmetics</button>
+          <button class="chip" onclick="sendQuickQuery('Where is Dettol Handwash?')">Where is Dettol?</button>
+          <button class="chip" onclick="sendQuickQuery('Snacks under 100')">Snacks under ₹100</button>
+          <button class="chip" onclick="sendQuickQuery('Show items in aisle 2')">Aisle 2 items</button>
+          <button class="chip" onclick="sendQuickQuery('Electronics')">Electronics</button>
+          <button class="chip" onclick="sendQuickQuery('Hygiene products in stock')">In-stock Hygiene</button>
         </div>
       </div>
 
       <!-- Input Bar -->
-      <div class="chat-input-container">
-        <input type="text" id="userInput" placeholder="Ask about products, prices, or store locations..." onkeypress="handleKeyPress(event)" />
-        <button onclick="sendMessage()">
+      <form class="chat-input-container" id="chatForm" onsubmit="handleChatSubmit(event)">
+        <input type="text" id="chatInput" placeholder="Type a message or product query..." autocomplete="off">
+        <button type="submit">
           <span>Send</span>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
         </button>
-      </div>
+      </form>
 
     </div>
   </main>
@@ -93,140 +104,122 @@ I can help you locate products, check aisle numbers, verify live stock availabil
     </div>
     <div class="drawer-body">
       <ul class="shelf-items-list" id="drawerShelfList"></ul>
+      <div id="cartSummaryContainer"></div>
     </div>
   </div>
 
   <script src="/static/script.js"></script>
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
+    const sessionId = "session-" + Math.random().toString(36).substr(2, 9);
+
+    document.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
-      const query = urlParams.get('q');
-      if (query) {
-        document.getElementById("userInput").value = query;
-        sendMessage();
+      const initialQuery = urlParams.get('q');
+      if (initialQuery) {
+        sendQuickQuery(initialQuery);
       }
     });
 
-    function handleKeyPress(e) {
-      if (e.key === 'Enter') {
-        sendMessage();
-      }
-    }
+    async function handleChatSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text) return;
 
-    function sendQuickPrompt(promptText) {
-      document.getElementById("userInput").value = promptText;
-      sendMessage();
-    }
+      appendUserMessage(text);
+      input.value = '';
 
-    function formatText(text) {
-      let formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-      formatted = formatted.replace(/\n/g, '<br>');
-      return formatted;
-    }
-
-    async function sendMessage() {
-      const input = document.getElementById("userInput");
-      const msg = input.value.trim();
-      if (!msg) return;
-
-      const box = document.getElementById("chatbox");
-
-      box.innerHTML += `
-        <div class="msg-wrapper user">
-          <div class="msg-avatar-icon">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-          </div>
-          <div class="msg-bubble">${escapeHtml(msg)}</div>
-        </div>
-      `;
-      input.value = "";
-      box.scrollTop = box.scrollHeight;
-
-      const typingId = "typing_" + Date.now();
-      box.innerHTML += `
-        <div class="msg-wrapper bot" id="${typingId}">
-          <div class="msg-avatar-icon">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><rect x="4" y="8" width="16" height="12" rx="2"></rect><path d="M9 13v2"></path><path d="M15 13v2"></path></svg>
-          </div>
-          <div class="msg-bubble">
-            <div class="typing-dots">
-              <span></span><span></span><span></span>
-            </div>
-          </div>
-        </div>
-      `;
-      box.scrollTop = box.scrollHeight;
+      showTypingIndicator();
 
       try {
-        const res = await fetch("/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: msg })
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: text, session_id: sessionId })
         });
-
         const data = await res.json();
-        
-        const typingElem = document.getElementById(typingId);
-        if (typingElem) typingElem.remove();
-
-        let productCardsHtml = "";
-        if (data.products && data.products.length > 0) {
-          productCardsHtml = data.products.map(p => `
-            <div class="chat-product-card">
-              <img src="/static/assets/${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/64?text=Item'">
-              <div class="chat-product-details">
-                <h4>${p.name}</h4>
-                <p>₹${p.price} • ${p.location} • <span style="color:${p.stock_status === 'In Stock' ? 'var(--success)' : 'var(--danger)'}; font-weight:700;">${p.stock_status}</span></p>
-                <button class="btn-shelve" style="margin-top:8px; padding:6px 12px; font-size:0.8rem;" data-shelf-item="${p.name}" onclick="toggleShelf('${p.name.replace(/'/g, "\\'")}', '${p.price}', '${p.category.replace(/'/g, "\\'")}', '${p.image}')">
-                  + Shelve
-                </button>
-              </div>
-            </div>
-          `).join('');
-        }
-
-        box.innerHTML += `
-          <div class="msg-wrapper bot">
-            <div class="msg-avatar-icon">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><rect x="4" y="8" width="16" height="12" rx="2"></rect><path d="M9 13v2"></path><path d="M15 13v2"></path></svg>
-            </div>
-            <div class="msg-bubble">
-              ${formatText(data.reply)}
-              ${productCardsHtml}
-            </div>
-          </div>
-        `;
-
-        updateShelfUI();
+        hideTypingIndicator();
+        appendBotReply(data.reply, data.products);
       } catch (err) {
-        const typingElem = document.getElementById(typingId);
-        if (typingElem) typingElem.remove();
-
-        box.innerHTML += `
-          <div class="msg-wrapper bot">
-            <div class="msg-avatar-icon">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><rect x="4" y="8" width="16" height="12" rx="2"></rect><path d="M9 13v2"></path><path d="M15 13v2"></path></svg>
-            </div>
-            <div class="msg-bubble" style="color: var(--danger);">
-              Connection issue encountered. Please try again.
-            </div>
-          </div>
-        `;
+        hideTypingIndicator();
+        appendBotReply("Sorry, I experienced a connection error. Please try again.");
       }
-
-      box.scrollTop = box.scrollHeight;
     }
 
-    function escapeHtml(string) {
-      return String(string).replace(/[&<>"']/g, function(s) {
-        return {
-          "&": "&amp;",
-          "<": "&lt;",
-          ">": "&gt;",
-          '"': "&quot;",
-          "'": "&#39;"
-        }[s];
-      });
+    function sendQuickQuery(query) {
+      document.getElementById('chatInput').value = query;
+      handleChatSubmit(new Event('submit'));
+    }
+
+    function appendUserMessage(text) {
+      const container = document.getElementById('chatMessages');
+      const wrapper = document.createElement('div');
+      wrapper.className = 'msg-wrapper user';
+      wrapper.innerHTML = `
+        <div class="msg-avatar-icon">YOU</div>
+        <div class="msg-bubble">${escapeHtml(text)}</div>
+      `;
+      container.appendChild(wrapper);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function appendBotReply(replyText, products) {
+      const container = document.getElementById('chatMessages');
+      const wrapper = document.createElement('div');
+      wrapper.className = 'msg-wrapper bot';
+      
+      let html = `
+        <div class="msg-avatar-icon">AI</div>
+        <div class="msg-bubble">${formatMarkdown(replyText)}
+      `;
+
+      if (products && products.length > 0) {
+        html += products.map(p => `
+          <div class="chat-product-card">
+            <img src="/static/assets/${p.image}" alt="${escapeHtml(p.name)}" onerror="this.src='https://via.placeholder.com/68'">
+            <div class="chat-product-details">
+              <h4>${escapeHtml(p.name)}</h4>
+              <p>${escapeHtml(p.category)} • ₹${p.price} • ${escapeHtml(p.location)}</p>
+            </div>
+            <button class="btn-shelve" style="margin-top:0; width:auto; padding:0.4rem 0.8rem;" data-shelf-item="${escapeHtml(p.name)}" onclick="toggleShelf('${escapeJs(p.name)}', '${p.price}', '${escapeJs(p.category)}', '${p.image}', '${p.id}')">
+              + Shelve
+            </button>
+          </div>
+        `).join('');
+      }
+
+      html += `</div>`;
+      wrapper.innerHTML = html;
+      container.appendChild(wrapper);
+      container.scrollTop = container.scrollHeight;
+      updateShelfUI();
+    }
+
+    function showTypingIndicator() {
+      const container = document.getElementById('chatMessages');
+      const wrapper = document.createElement('div');
+      wrapper.id = 'typingIndicator';
+      wrapper.className = 'msg-wrapper bot';
+      wrapper.innerHTML = `
+        <div class="msg-avatar-icon">AI</div>
+        <div class="msg-bubble" style="padding: 0.8rem 1.2rem;">
+          <div class="typing-dots"><span></span><span></span><span></span></div>
+        </div>
+      `;
+      container.appendChild(wrapper);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function hideTypingIndicator() {
+      const el = document.getElementById('typingIndicator');
+      if (el) el.remove();
+    }
+
+    function formatMarkdown(text) {
+      return escapeHtml(text)
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/\n/g, '<br>');
     }
   </script>
 </body>

@@ -1,13 +1,45 @@
-// SwiftShop Production E-Commerce Engine & State Management
+// SwiftShop Production E-Commerce Engine & Theme State Management
 
 let shelf = JSON.parse(localStorage.getItem('swift_shelf') || '[]');
 
 document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
   updateShelfUI();
   setupDrawerListeners();
   setupAutocompleteSearch();
+  setupQuickViewModal();
 });
 
+/* Theme Management */
+function initTheme() {
+  const savedTheme = localStorage.getItem('swift_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  setTheme(savedTheme);
+
+  const toggleBtn = document.getElementById('themeToggleBtn');
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      setTheme(newTheme);
+      showToast(`Switched to ${newTheme} mode`);
+    });
+  }
+}
+
+function setTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('swift_theme', theme);
+
+  const toggleBtn = document.getElementById('themeToggleBtn');
+  if (toggleBtn) {
+    toggleBtn.innerHTML = theme === 'dark' 
+      ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`
+      : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
+    toggleBtn.setAttribute('title', `Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`);
+  }
+}
+
+/* Shelf Management */
 function saveShelf() {
   localStorage.setItem('swift_shelf', JSON.stringify(shelf));
   updateShelfUI();
@@ -47,12 +79,6 @@ function changeQuantity(itemName, delta) {
 function removeShelfItem(itemName) {
   shelf = shelf.filter(item => item.name !== itemName);
   showToast(`Removed "${itemName}" from shelf`);
-  saveShelf();
-}
-
-function clearShelf() {
-  shelf = [];
-  showToast("Shelf cleared");
   saveShelf();
 }
 
@@ -100,7 +126,6 @@ async function updateShelfUI() {
         </li>
       `).join('');
 
-      // Fetch Cart calculation from API backend
       try {
         const res = await fetch('/api/cart/calculate', {
           method: 'POST',
@@ -200,6 +225,95 @@ function setupAutocompleteSearch() {
   document.addEventListener('click', (e) => {
     if (!wrapper.contains(e.target)) {
       dropdown.style.display = 'none';
+    }
+  });
+}
+
+function setupQuickViewModal() {
+  let modalBackdrop = document.getElementById('productModalBackdrop');
+  if (!modalBackdrop) {
+    modalBackdrop = document.createElement('div');
+    modalBackdrop.id = 'productModalBackdrop';
+    modalBackdrop.className = 'modal-backdrop';
+    modalBackdrop.innerHTML = `
+      <div class="modal-card">
+        <div class="modal-header">
+          <span class="card-category" id="modalCategory">CATEGORY</span>
+          <button class="close-btn" id="modalCloseBtn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-img-wrap">
+            <img id="modalImg" src="" alt="Product">
+          </div>
+          <div class="modal-details">
+            <h3 id="modalTitle">Product Title</h3>
+            <div class="modal-price" id="modalPrice">₹0</div>
+            <p id="modalDesc" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.2rem;"></p>
+            <div style="display: flex; gap: 0.6rem; align-items: center; margin-bottom: 1.5rem;">
+              <span class="aisle-tag" id="modalLocation">Aisle 1</span>
+              <span class="badge-stock in-stock" id="modalStock" style="position: static;">In Stock</span>
+              <span class="rating-pill" id="modalRating" style="position: static;">★ 4.8</span>
+            </div>
+            <button class="btn-shelve" id="modalShelveBtn">+ Shelve</button>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modalBackdrop);
+
+    const close = () => modalBackdrop.classList.remove('active');
+    document.getElementById('modalCloseBtn').addEventListener('click', close);
+    modalBackdrop.addEventListener('click', (e) => {
+      if (e.target === modalBackdrop) close();
+    });
+  }
+
+  document.addEventListener('click', async (e) => {
+    const cardImg = e.target.closest('.card-img-wrap');
+    const cardTitle = e.target.closest('.card-title');
+    const targetEl = cardImg || cardTitle;
+
+    if (targetEl) {
+      const card = targetEl.closest('.card');
+      if (!card) return;
+
+      const title = card.querySelector('.card-title')?.textContent;
+      const price = card.querySelector('.price')?.textContent;
+      const category = card.querySelector('.card-category')?.textContent;
+      const desc = card.querySelector('.card-desc')?.textContent;
+      const location = card.querySelector('.aisle-tag')?.textContent;
+      const imgSrc = card.querySelector('img')?.src;
+      const shelveBtn = card.querySelector('.btn-shelve');
+      const itemName = shelveBtn?.getAttribute('data-shelf-item') || title;
+
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalPrice').textContent = price;
+      document.getElementById('modalCategory').textContent = category;
+      document.getElementById('modalDesc').textContent = desc;
+      document.getElementById('modalLocation').textContent = location;
+      document.getElementById('modalImg').src = imgSrc;
+
+      const mShelveBtn = document.getElementById('modalShelveBtn');
+      if (isShelved(itemName)) {
+        mShelveBtn.classList.add('shelved');
+        mShelveBtn.innerHTML = '✓ Shelved';
+      } else {
+        mShelveBtn.classList.remove('shelved');
+        mShelveBtn.innerHTML = '+ Shelve';
+      }
+
+      mShelveBtn.onclick = () => {
+        toggleShelf(itemName, price.replace('₹', ''), category, imgSrc.split('/').pop());
+        if (isShelved(itemName)) {
+          mShelveBtn.classList.add('shelved');
+          mShelveBtn.innerHTML = '✓ Shelved';
+        } else {
+          mShelveBtn.classList.remove('shelved');
+          mShelveBtn.innerHTML = '+ Shelve';
+        }
+      };
+
+      modalBackdrop.classList.add('active');
     }
   });
 }

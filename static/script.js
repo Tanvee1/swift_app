@@ -45,7 +45,11 @@ function saveShelf() {
   updateShelfUI();
 }
 
-function toggleShelf(itemName, price, category, image, productId) {
+function toggleShelf(itemName, price, category, image, productId, stockStatus) {
+  if (stockStatus && stockStatus !== 'In Stock') {
+    showToast(`"${itemName}" is currently Out of Stock`);
+    return;
+  }
   const index = shelf.findIndex(item => item.name === itemName);
   if (index === -1) {
     shelf.push({ 
@@ -93,6 +97,7 @@ async function updateShelfUI() {
 
   const buttons = document.querySelectorAll('[data-shelf-item]');
   buttons.forEach(btn => {
+    if (btn.disabled) return;
     const itemName = btn.getAttribute('data-shelf-item');
     if (isShelved(itemName)) {
       btn.classList.add('shelved');
@@ -294,24 +299,32 @@ function setupQuickViewModal() {
       document.getElementById('modalImg').src = imgSrc;
 
       const mShelveBtn = document.getElementById('modalShelveBtn');
-      if (isShelved(itemName)) {
+      if (shelveBtn && shelveBtn.disabled) {
+        mShelveBtn.disabled = true;
+        mShelveBtn.innerHTML = 'Out of Stock';
+        mShelveBtn.onclick = null;
+      } else if (isShelved(itemName)) {
+        mShelveBtn.disabled = false;
         mShelveBtn.classList.add('shelved');
         mShelveBtn.innerHTML = '✓ Shelved';
       } else {
+        mShelveBtn.disabled = false;
         mShelveBtn.classList.remove('shelved');
         mShelveBtn.innerHTML = '+ Shelve';
       }
 
-      mShelveBtn.onclick = () => {
-        toggleShelf(itemName, price.replace('₹', ''), category, imgSrc.split('/').pop());
-        if (isShelved(itemName)) {
-          mShelveBtn.classList.add('shelved');
-          mShelveBtn.innerHTML = '✓ Shelved';
-        } else {
-          mShelveBtn.classList.remove('shelved');
-          mShelveBtn.innerHTML = '+ Shelve';
-        }
-      };
+      if (!mShelveBtn.disabled) {
+        mShelveBtn.onclick = () => {
+          toggleShelf(itemName, price.replace('₹', ''), category, imgSrc.split('/').pop());
+          if (isShelved(itemName)) {
+            mShelveBtn.classList.add('shelved');
+            mShelveBtn.innerHTML = '✓ Shelved';
+          } else {
+            mShelveBtn.classList.remove('shelved');
+            mShelveBtn.innerHTML = '+ Shelve';
+          }
+        };
+      }
 
       modalBackdrop.classList.add('active');
     }

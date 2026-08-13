@@ -73,8 +73,8 @@
               <span class="price">₹{{ product.price }}</span>
               <span class="aisle-tag">{{ product.location }}</span>
             </div>
-            <button class="btn-shelve" data-shelf-item="{{ product.name }}" onclick="toggleShelf('{{ product.name|escape }}', '{{ product.price }}', '{{ product.category|escape }}', '{{ product.image }}', '{{ product.id }}')">
-              + Shelve
+            <button class="btn-shelve" {% if product.stock_status != 'In Stock' %}disabled{% endif %} data-shelf-item="{{ product.name }}" onclick="toggleShelf('{{ product.name|escape }}', '{{ product.price }}', '{{ product.category|escape }}', '{{ product.image }}', '{{ product.id }}', '{{ product.stock_status }}')">
+              {% if product.stock_status == 'In Stock' %}+ Shelve{% else %}Out of Stock{% endif %}
             </button>
           </div>
         </div>
@@ -106,8 +106,8 @@
               <span class="price">₹{{ product.price }}</span>
               <span class="aisle-tag">{{ product.location }}</span>
             </div>
-            <button class="btn-shelve" data-shelf-item="{{ product.name }}" onclick="toggleShelf('{{ product.name|escape }}', '{{ product.price }}', '{{ product.category|escape }}', '{{ product.image }}', '{{ product.id }}')">
-              + Shelve
+            <button class="btn-shelve" {% if product.stock_status != 'In Stock' %}disabled{% endif %} data-shelf-item="{{ product.name }}" onclick="toggleShelf('{{ product.name|escape }}', '{{ product.price }}', '{{ product.category|escape }}', '{{ product.image }}', '{{ product.id }}', '{{ product.stock_status }}')">
+              {% if product.stock_status == 'In Stock' %}+ Shelve{% else %}Out of Stock{% endif %}
             </button>
           </div>
         </div>
